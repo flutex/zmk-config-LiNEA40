@@ -57,7 +57,7 @@
         layers = <SCROLL>;
         input-processors =
             <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>,
-            //スクロール方向を逆転,,,,,,
+            //スクロール方向を逆転,,,,,,,
             <&zip_xy_to_scroll_mapper>;
     };
 };
@@ -68,19 +68,19 @@
 
         RightClick {
             bindings = <&mkp MB2>;
-            key-positions = <18 17>;
+            key-positions = <19 18>;
             layers = <0>;
         };
 
         leftclick {
             bindings = <&mkp MB1>;
-            key-positions = <16 17>;
+            key-positions = <17 18>;
             layers = <0>;
         };
 
         Middlclick {
             bindings = <&mkp MB3>;
-            key-positions = <7 17>;
+            key-positions = <17 18 19>;
             layers = <0>;
         };
 
@@ -146,7 +146,7 @@
 
         middleclick2 {
             bindings = <&mkp MB3>;
-            key-positions = <2 12>;
+            key-positions = <12 11 13>;
             layers = <0>;
         };
 
@@ -190,10 +190,10 @@
 
         default_layer {
             bindings = <
-&kp Q      &kp W         &kp E         &kp R           &kp T                                    &kp Y        &kp U  &kp I            &kp O                 &kp P
-&kp A      &kp S         &kp D         &kp F           &kp G                                    &kp H        &kp J  &kp K            &kp L                 &kp BACKSPACE
-&kp Z      &kp X         &kp C         &kp V           &kp B                                    &kp N        &kp M  &mt RCTRL COMMA  &mt RIGHT_ALT PERIOD  &kp MINUS
-&kp LCTRL  &kp LEFT_WIN  &kp LEFT_ALT  &kp LANGUAGE_2  &lt 5 SPACE  &kp TAB    &kp RIGHT_SHIFT  &lt 3 ENTER         &mo 6            &mo 2                 &lt 4 SLASH
+&kp Q      &kp W         &kp E         &kp R             &kp T                                               &kp Y        &kp U  &kp I            &kp O                 &kp P
+&kp A      &kp S         &kp D         &kp F             &kp G                                               &kp H        &kp J  &kp K            &kp L                 &kp BACKSPACE
+&kp Z      &kp X         &kp C         &kp V             &kp B                                               &kp N        &kp M  &mt RCTRL COMMA  &mt RIGHT_ALT PERIOD  &kp MINUS
+&kp LCTRL  &kp LEFT_WIN  &kp LEFT_ALT  &lt 2 LANGUAGE_2  &lt 5 SPACE  &kp TAB    &mt RIGHT_SHIFT LANGUAGE_1  &lt 3 ENTER         &mo 6            &kp LEFT_WIN          &mo 4
             >;
 
             sensor-bindings = <&mouse_scrl SCRL_DOWN SCRL_UP>;
@@ -238,8 +238,8 @@
 
         FUNCTION {
             bindings = <
-&kp F1  &kp F2  &kp F3  &kp F4   &kp F5                     &kp K_VOLUME_UP    &kp F7  &kp F8  &kp F9  &trans
-&kp F6  &kp F7  &kp F8  &kp F9   &kp F10                    &kp K_VOLUME_DOWN  &kp F4  &kp F5  &kp F6  &trans
+&kp F1  &kp F2  &kp F3  &kp F4   &kp F5                     &kp C_VOLUME_UP    &kp F7  &kp F8  &kp F9  &trans
+&kp F6  &kp F7  &kp F8  &kp F9   &kp F10                    &kp C_VOLUME_DOWN  &kp F4  &kp F5  &kp F6  &trans
 &trans  &trans  &trans  &kp F11  &kp F12                    &kp C_MUTE         &kp F1  &kp F2  &kp F3  &trans
 &trans  &trans  &trans  &trans   &trans   &trans    &trans  &trans                     &trans  &trans  &trans
             >;
@@ -264,10 +264,10 @@
 
         WIRELESS {
             bindings = <
-&bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4                         &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-&trans        &trans        &trans        &trans        &trans                               &trans          &trans        &trans        &trans        &trans
-&trans        &trans        &trans        &trans        &trans                               &trans          &trans        &trans        &trans        &bt BT_CLR
-&trans        &trans        &trans        &trans        &trans        &trans    &bootloader  &studio_unlock                &trans        &trans        &bt BT_CLR_ALL
+&bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4                              &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
+&trans        &trans        &trans        &trans        &trans                                    &trans          &trans        &trans        &trans        &trans
+&trans        &trans        &trans        &trans        &trans                                    &trans          &trans        &trans        &trans        &bt BT_CLR
+&trans        &trans        &trans        &trans        &trans        &bootloader    &bootloader  &studio_unlock                &trans        &trans        &bt BT_CLR_ALL
             >;
 
             sensor-bindings = <&inc_dec_kp RIGHT_ARROW LEFT_ARROW>;
