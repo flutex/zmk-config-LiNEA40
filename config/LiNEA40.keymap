@@ -57,7 +57,7 @@
         layers = <SCROLL>;
         input-processors =
             <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>,
-            //スクロール方向を逆転,,,,,,,
+            //スクロール方向を逆転,,,,,,,,
             <&zip_xy_to_scroll_mapper>;
     };
 };
@@ -166,6 +166,30 @@
             bindings = <&kp LSHIFT>;
             key-positions = <20 21>;
             layers = <0>;
+        };
+
+        leftclick3 {
+            bindings = <&mkp MB1>;
+            key-positions = <17 16>;
+            layers = <0 2>;
+        };
+
+        combo_F10 {
+            bindings = <&kp F10>;
+            key-positions = <26 16>;
+            layers = <4>;
+        };
+
+        combo_F11 {
+            bindings = <&kp F11>;
+            key-positions = <17 27>;
+            layers = <4>;
+        };
+
+        combo_F12 {
+            bindings = <&kp F12>;
+            key-positions = <18 28>;
+            layers = <4>;
         };
     };
 
