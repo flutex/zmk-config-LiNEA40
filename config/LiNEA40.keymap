@@ -57,7 +57,7 @@
         layers = <SCROLL>;
         input-processors =
             <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>,
-            //スクロール方向を逆転,,,,,,,,
+            //スクロール方向を逆転,,,,,,,,,
             <&zip_xy_to_scroll_mapper>;
     };
 };
@@ -69,19 +69,19 @@
         RightClick {
             bindings = <&mkp MB2>;
             key-positions = <19 18>;
-            layers = <0>;
+            layers = <0 2>;
         };
 
         leftclick {
             bindings = <&mkp MB1>;
             key-positions = <17 18>;
-            layers = <0>;
+            layers = <0 2>;
         };
 
         Middlclick {
             bindings = <&mkp MB3>;
             key-positions = <17 18 19>;
-            layers = <0>;
+            layers = <0 2>;
         };
 
         equal {
@@ -135,19 +135,19 @@
         leftclick2 {
             bindings = <&mkp MB1>;
             key-positions = <12 13>;
-            layers = <0>;
+            layers = <0 2>;
         };
 
         Rightclick2 {
             bindings = <&mkp MB2>;
             key-positions = <11 12>;
-            layers = <0>;
+            layers = <0 2>;
         };
 
         middleclick2 {
             bindings = <&mkp MB3>;
             key-positions = <12 11 13>;
-            layers = <0>;
+            layers = <0 2>;
         };
 
         combo_esc {
@@ -177,19 +177,19 @@
         combo_F10 {
             bindings = <&kp F10>;
             key-positions = <26 16>;
-            layers = <4>;
+            layers = <4 2>;
         };
 
         combo_F11 {
             bindings = <&kp F11>;
             key-positions = <17 27>;
-            layers = <4>;
+            layers = <4 2>;
         };
 
         combo_F12 {
             bindings = <&kp F12>;
             key-positions = <18 28>;
-            layers = <4>;
+            layers = <4 2>;
         };
     };
 
@@ -238,10 +238,10 @@
 
         MARK {
             bindings = <
-&kp EXCLAMATION             &kp AT           &kp HASH         &kp DOLLAR     &kp PERCENT                      &kp CARET     &kp AMPERSAND  &kp ASTERISK           &kp LEFT_PARENTHESIS  &kp LBKT
-&kp SLASH                   &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp SEMICOLON  &kp SEMICOLON                    &kp C_MUTE    &kp LS(LBKT)   &kp RIGHT_BRACKET      &kp BACKSLASH         &kp EQUAL
-&mt LEFT_SHIFT KP_NUMBER_0  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp APOS       &kp SQT                          &kp KP_EQUAL  &kp INT3       &kp LS(RIGHT_BRACKET)  &kp LS(BACKSLASH)     &kp LS(INT1)
-&trans                      &trans           &trans           &trans         &trans         &trans    &trans  &trans                       &kp ASTERISK           &kp LEFT_PARENTHESIS  &kp LS(QUESTION)
+&trans  &trans  &trans  &trans  &trans                    &trans  &kp F7  &kp F8  &kp F9  &trans
+&trans  &trans  &trans  &trans  &trans                    &trans  &kp F4  &kp F5  &kp F6  &trans
+&trans  &trans  &trans  &trans  &trans                    &trans  &kp F1  &kp F2  &kp F3  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans          &trans  &trans  &trans
             >;
 
             sensor-bindings = <&re_kp C_VOLUME_DOWN C_VOLUME_UP>;
