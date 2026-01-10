@@ -44,7 +44,7 @@
          *
          * → トラックボール操作中のみ Layer2 を有効にする用途
          */
-        input-processors = <&zip_temp_layer 2 100000>;
+        input-processors = <&zip_temp_layer 2 10000>;
     };
 };
 
