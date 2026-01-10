@@ -1,3 +1,4 @@
+#include <input/processors.dtsi>
 #include "LiNEA40.dtsi"
 &default_transform {
     col-offset = <6>;
@@ -18,6 +19,19 @@
         compatible = "zmk,input-listener";
         device = <&trackball>;
 
+        /*
+         * トラックボール入力に一時レイヤー処理を追加
+         *
+         * zip_temp_layer:
+         *   指定した入力が来たときに、一時的にレイヤーを有効化する
+         *
+         * 引数:
+         *   2     : 一時的に有効化するレイヤー番号
+         *   10000 : タイムアウト（ミリ秒）
+         *
+         * → トラックボール操作中のみ Layer2 を有効にする用途
+         */
+        input-processors = <&zip_temp_layer 2 10000>;
     };
 };
 
