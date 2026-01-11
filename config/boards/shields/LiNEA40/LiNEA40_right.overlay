@@ -21,8 +21,6 @@
         16 // J
         17 // K
         7 //  I
-        19 // DEL
-        28 // Z
     >;
 };
 
@@ -44,7 +42,7 @@
          *
          * → トラックボール操作中のみ Layer2 を有効にする用途
          */
-        input-processors = <&zip_temp_layer 2 10000>;
+        input-processors = <&zip_temp_layer 2 1000>;
     };
 };
 
