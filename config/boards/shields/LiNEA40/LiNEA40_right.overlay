@@ -40,9 +40,9 @@
          *   2     : 一時的に有効化するレイヤー番号
          *   10000 : タイムアウト（ミリ秒）
          *
-         * → トラックボール操作中のみ Layer2 を有効にする用途
+         * → トラックボール操作中のみ Layer3 を有効にする用途
          */
-        input-processors = <&zip_temp_layer 2 1000>;
+        input-processors = <&zip_temp_layer 3 1000>;
     };
 };
 
@@ -84,7 +84,7 @@
         irq-gpios = <&xiao_d 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; //MOT-D6
         //automouse-layer = <1>;
         //snipe-layers = <2>;
-        scroll-layers = <5>;
+        scroll-layers = <6>;
         //scroll-layers = <4 5 6>;
     };
 };
