@@ -57,7 +57,7 @@
         layers = <SCROLL>;
         input-processors =
             <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>,
-            //スクロール方向を逆転,,,,,,,,,,,,,,,,,,,,,,,
+            //スクロール方向を逆転,,,,,,,,,,,,,,,,,,,,,,,,
             <&zip_xy_to_scroll_mapper>;
     };
 };
@@ -254,10 +254,10 @@
 
         CURSOR {
             bindings = <
-&kp LC(Q)  &kp LC(W)  &kp LC(W)  &kp LC(R)  &kp LC(T)                    &kp LC(LS(TAB))  &kp LC(TAB)     &mkp MCLK       &mkp MB4         &mkp MB5
-&kp LC(A)  &kp LC(S)  &kp LC(D)  &kp LC(F)  &kp LC(G)                    &kp PAGE_UP      &mkp MB1        &kp UP_ARROW    &mkp MB2         &kp DEL
-&kp LC(Z)  &kp LC(X)  &kp LC(C)  &kp LC(V)  &kp LC(B)                    &kp PAGE_DOWN    &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &trans
-&trans     &trans     &trans     &trans     &trans     &trans    &trans  &trans                           &trans          &trans           &trans
+&kp LC(Q)  &kp LC(W)     &kp LC(W)  &kp LC(R)  &kp LC(T)                    &kp LC(LS(TAB))  &kp LC(TAB)     &mkp MCLK       &mkp MB4         &mkp MB5
+&kp LC(A)  &kp LC(S)     &kp LC(D)  &kp LC(F)  &kp LC(G)                    &kp PAGE_UP      &mkp MB1        &kp UP_ARROW    &mkp MB2         &kp DEL
+&kp LC(Z)  &kp LC(X)     &kp LC(C)  &kp LC(V)  &kp LC(B)                    &kp PAGE_DOWN    &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &trans
+&kp LCTRL  &kp LEFT_WIN  &trans     &trans     &trans     &trans    &trans  &trans                           &trans          &trans           &trans
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOLUME_DOWN C_VOLUME_UP>;
@@ -309,10 +309,10 @@
 
         layer_8_forMac2 {
             bindings = <
-&kp LG(Q)  &kp LG(W)  &kp LG(W)  &kp LG(R)  &kp LG(T)                    &kp LC(LS(TAB))  &kp LC(TAB)     &mkp MCLK       &mkp MB4         &mkp MB5
-&kp LG(A)  &kp LG(A)  &kp LG(D)  &kp LG(F)  &kp LG(G)                    &kp PAGE_UP      &mkp MB1        &kp UP_ARROW    &mkp MB2         &kp DEL
-&kp LG(Z)  &kp LG(X)  &kp LG(C)  &kp LG(V)  &kp LG(B)                    &kp PAGE_DOWN    &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &trans
-&trans     &trans     &trans     &trans     &trans     &trans    &trans  &trans                           &trans          &trans           &trans
+&kp LG(Q)     &kp LG(W)  &kp LG(W)  &kp LG(R)  &kp LG(T)                    &kp LC(LS(TAB))  &kp LC(TAB)     &mkp MCLK       &mkp MB4         &mkp MB5
+&kp LG(A)     &kp LG(A)  &kp LG(D)  &kp LG(F)  &kp LG(G)                    &kp PAGE_UP      &mkp MB1        &kp UP_ARROW    &mkp MB2         &kp DEL
+&kp LG(Z)     &kp LG(X)  &kp LG(C)  &kp LG(V)  &kp LG(B)                    &kp PAGE_DOWN    &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &trans
+&kp LEFT_WIN  &kp LCTRL  &trans     &trans     &trans     &trans    &trans  &trans                           &trans          &trans           &trans
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOLUME_DOWN C_VOLUME_UP>;
