@@ -1,6 +1,5 @@
 #include <zephyr/kernel.h>
 #include <zephyr/input/input.h>
-#include <zephyr/input/input_event_codes.h>
 #include <dt-bindings/zmk/keys.h>
 #include <zmk/keymap.h>
 #include <zmk/events/keycode_state_changed.h>
