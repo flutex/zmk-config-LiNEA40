@@ -14,7 +14,6 @@
 #define FUNCTION 4
 #define SCROLL 5
 #define WIRELESS 6
-#define GESTURE 10
 
 //mouse cursol
 
@@ -208,14 +207,6 @@
 
             tap-ms = <20>;
         };
-
-        gesturelt: gesture_layer_tap {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            tapping-term-ms = <200>;
-            flavor = "hold-preferred";
-            bindings = <&mo>, <&kp>;
-        };
     };
 
     keymap {
@@ -226,7 +217,7 @@
 &kp Q      &kp W         &kp E         &kp R             &kp T                                               &kp Y        &kp U  &kp I            &kp O                 &kp P
 &kp A      &kp S         &kp D         &kp F             &kp G                                               &kp H        &kp J  &kp K            &kp L                 &kp BACKSPACE
 &kp Z      &kp X         &kp C         &kp V             &kp B                                               &kp N        &kp M  &mt RCTRL COMMA  &mt RIGHT_ALT PERIOD  &kp MINUS
-&kp LCTRL  &kp LEFT_WIN  &kp LEFT_ALT  &lt 5 LANGUAGE_2  &lt 6 SPACE  &kp TAB    &mt RIGHT_SHIFT LANGUAGE_1  &lt 4 ENTER         &mo 7            &gesturelt GESTURE LEFT_WIN   &lt 6 MINUS
+&kp LCTRL  &kp LEFT_WIN  &kp LEFT_ALT  &lt 5 LANGUAGE_2  &lt 6 SPACE  &kp TAB    &mt RIGHT_SHIFT LANGUAGE_1  &lt 4 ENTER         &mo 7            &kp LEFT_WIN          &lt 6 MINUS
             >;
 
             sensor-bindings = <&mouse_scrl SCRL_DOWN SCRL_UP>;
