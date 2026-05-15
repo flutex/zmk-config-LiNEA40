@@ -1,5 +1,6 @@
 #include <zephyr/kernel.h>
 #include <zephyr/input/input.h>
+#include <stdlib.h>
 #include <dt-bindings/zmk/keys.h>
 #include <zmk/keymap.h>
 #include <zmk/events/keycode_state_changed.h>
@@ -20,7 +21,7 @@ static void fire_gesture(uint32_t key) {
     accum_y = 0;
 }
 
-static void gesture_input_cb(struct input_event *evt, void *user_data) {
+static void gesture_input_cb(struct input_event *evt) {
     if (!zmk_keymap_layer_active(GESTURE_LAYER)) {
         accum_x = 0;
         accum_y = 0;
@@ -41,4 +42,4 @@ static void gesture_input_cb(struct input_event *evt, void *user_data) {
         fire_gesture(accum_y < 0 ? LC(UP_ARROW) : LC(DOWN_ARROW));
 }
 
-INPUT_CALLBACK_DEFINE(NULL, gesture_input_cb, NULL);
+INPUT_CALLBACK_DEFINE(NULL, gesture_input_cb);
