@@ -7,6 +7,7 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
+#include <mouse-gesture.dtsi>
 
 #define MOUSE 1
 #define MARK 2
@@ -59,6 +60,37 @@
             <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>,
             //スクロール方向を逆転,,,,,,,,,,,,,,,,,,,,,,,,,,
             <&zip_xy_to_scroll_mapper>;
+    };
+
+    gesture {
+        layers = <10>;
+        input-processors = <&zip_mouse_gesture>;
+    };
+};
+
+&zip_mouse_gesture {
+    always-active;
+    enable-eager-mode;
+    stroke-size = <200>;
+
+    prev_desktop {
+        pattern = <GESTURE_LEFT>;
+        bindings = <&kp LC(LEFT_ARROW)>;
+    };
+
+    next_desktop {
+        pattern = <GESTURE_RIGHT>;
+        bindings = <&kp LC(RIGHT_ARROW)>;
+    };
+
+    mission_control {
+        pattern = <GESTURE_UP>;
+        bindings = <&kp LC(UP_ARROW)>;
+    };
+
+    launchpad {
+        pattern = <GESTURE_DOWN>;
+        bindings = <&kp LS(LG(A))>;
     };
 };
 
