@@ -1,3 +1,9 @@
 config ZMK_BEHAVIOR_OS_LAYER
     bool "Auto layer switching based on BLE profile (OS detection)"
     default n
+
+config CUSTOM_BATTERY_TYPIST
+    bool "Enable battery level typing behavior"
+    default y
+    depends on ZMK_BATTERY_REPORTING
+    depends on !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL

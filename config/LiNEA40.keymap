@@ -95,6 +95,11 @@
 };
 
 / {
+    battery_type: battery_type {
+        compatible = "zmk,behavior-battery-type";
+        #binding-cells = <0>;
+    };
+
     combos {
         compatible = "zmk,combos";
 
@@ -302,7 +307,7 @@
         WIRELESS {
             bindings = <
 &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4                              &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-&trans        &trans        &trans        &trans        &trans                                    &tog 0          &trans        &trans        &trans        &tog 8
+&trans        &trans        &trans        &trans        &trans                                    &battery_type   &trans        &trans        &trans        &tog 8
 &trans        &trans        &trans        &trans        &trans                                    &trans          &trans        &trans        &trans        &bt BT_CLR
 &trans        &trans        &trans        &trans        &trans        &bootloader    &bootloader  &studio_unlock                &trans        &trans        &bt BT_CLR_ALL
             >;
