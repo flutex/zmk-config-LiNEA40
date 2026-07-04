@@ -7,3 +7,9 @@ config CUSTOM_BATTERY_TYPIST
     default y
     depends on ZMK_BATTERY_REPORTING
     depends on !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL
+
+config ZMK_LAYER_STATUS_GATT
+    bool "Expose active layer state via custom BLE GATT service (for LineaStudio overlay)"
+    default n
+    depends on ZMK_BLE
+    depends on !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL
