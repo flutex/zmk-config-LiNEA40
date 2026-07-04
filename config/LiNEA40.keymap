@@ -181,7 +181,7 @@
             layers = <0>;
         };
 
-        combo_shitft {
+        combo_shift {
             bindings = <&kp LSHIFT>;
             key-positions = <20 21>;
             layers = <0>;
