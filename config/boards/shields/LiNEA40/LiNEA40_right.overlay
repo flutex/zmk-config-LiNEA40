@@ -83,7 +83,10 @@
         spi-max-frequency = <2000000>;
         irq-gpios = <&xiao_d 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; //MOT-D6
         //automouse-layer = <1>;
-        //snipe-layers = <2>;
+        // snipe精密モード: レイヤー11(Snipe)が有効な間 SNIPE_CPI=450/DIVIDOR=2 (1/4速)。
+        // 発動キーはLineaStudioから &mo 11 (Momentary/Snipe) をランタイム割当できる。
+        // 注意: レイヤーindex固定のため、StudioでSnipe層を並べ替えるとズレる
+        snipe-layers = <11>;
         scroll-layers = <6>;
         //scroll-layers = <4 5 6>;
     };

@@ -347,7 +347,7 @@
         };
 
         spare_layer_1 {
-            display-name = "Spare 1";
+            display-name = "Snipe";
             bindings = <
 &trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans
