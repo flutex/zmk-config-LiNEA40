@@ -7,11 +7,14 @@
  * Service:        4C4E4541-3430-4B42-0001-000000000001  ("LNEA"-"40"-"KB")
  * Characteristic: 4C4E4541-3430-4B42-0001-000000000002  (Read + Notify, 要暗号化)
  *
- * ペイロード(5バイト):
+ * ペイロード(7バイト・旧5バイトの上位互換):
  *   [0..3] レイヤー状態ビットマスク (uint32 LE, bit N = レイヤーN有効)
  *   [4]    最上位アクティブレイヤー index (uint8)
+ *   [5]    アクティブBTプロファイル index (uint8, 0..4。USB選択中も選択中プロファイルを保持)
+ *   [6]    アクティブエンドポイント (uint8, 0=USB / 1=BLE)
+ * Mac側はペイロード長で新旧を判別する（>=7で[5][6]を読む）。
  *
- * レイヤー変更は低頻度なのでBLE帯域・電池への影響は無視できる。
+ * レイヤー/プロファイル/エンドポイント変更は低頻度なのでBLE帯域・電池への影響は無視できる。
  */
 
 #include <zephyr/kernel.h>
@@ -22,14 +25,22 @@
 
 #include <zmk/event_manager.h>
 #include <zmk/events/layer_state_changed.h>
+#include <zmk/events/endpoint_changed.h>
+#include <zmk/events/ble_active_profile_changed.h>
 #include <zmk/keymap.h>
+#include <zmk/ble.h>
+#include <zmk/endpoints.h>
 
-static uint8_t layer_payload[5];
+static uint8_t layer_payload[7];
 static bool notify_enabled;
 
 static void update_payload(void) {
     sys_put_le32(zmk_keymap_layer_state(), layer_payload);
     layer_payload[4] = (uint8_t)zmk_keymap_highest_layer_active();
+    /* 選択中BTプロファイル（USB選択中も有効）。ep.ble.profile_index はBLE時しか設定されないため使わない */
+    layer_payload[5] = (uint8_t)zmk_ble_active_profile_index();
+    struct zmk_endpoint_instance ep = zmk_endpoints_selected();
+    layer_payload[6] = (uint8_t)ep.transport; /* 0=USB / 1=BLE */
 }
 
 static void layer_ccc_changed(const struct bt_gatt_attr *attr, uint16_t value) {
@@ -64,3 +75,7 @@ static int layer_status_listener(const zmk_event_t *eh) {
 
 ZMK_LISTENER(layer_status_gatt, layer_status_listener);
 ZMK_SUBSCRIPTION(layer_status_gatt, zmk_layer_state_changed);
+/* エンドポイント切替（BLE選択中のプロファイル切替でも発火）でペイロード[5][6]を更新 */
+ZMK_SUBSCRIPTION(layer_status_gatt, zmk_endpoint_changed);
+/* USB選択中はendpoint_changedが発火しないため、プロファイル切替を直接購読して[5]を追随 */
+ZMK_SUBSCRIPTION(layer_status_gatt, zmk_ble_active_profile_changed);

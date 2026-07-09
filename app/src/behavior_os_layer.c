@@ -13,6 +13,21 @@
 
 #define LAYER_MAC 1
 #define LAYER_IOS 2
+// Real node-order index in config/LiNEA40.keymap (NOT the stale #define SCROLL etc.)
+#define LAYER_JIS_MODE 14
+
+// Per-profile host keyboard layout (US=false / JIS=true).
+// Edit this to match each machine's OS keyboard layout setting, then reflash via A-7.
+// Default all-US keeps current typing behavior unchanged (JIS_MODE stays inert).
+static const bool profile_is_jis[5] = {false, false, false, false, false};
+
+static void update_jis_layer(uint8_t profile) {
+    if (profile < 5 && profile_is_jis[profile]) {
+        zmk_keymap_layer_activate(LAYER_JIS_MODE);
+    } else {
+        zmk_keymap_layer_deactivate(LAYER_JIS_MODE);
+    }
+}
 
 static void update_os_layers(uint8_t profile) {
     switch (profile) {
@@ -36,6 +51,7 @@ static int os_layer_listener_cb(const zmk_event_t *eh) {
         as_zmk_ble_active_profile_changed(eh);
     if (ev) {
         update_os_layers(ev->index);
+        update_jis_layer(ev->index);
     }
     return ZMK_EV_EVENT_BUBBLE;
 }
@@ -45,6 +61,7 @@ ZMK_SUBSCRIPTION(os_layer_listener, zmk_ble_active_profile_changed);
 
 static int behavior_os_layer_init(void) {
     update_os_layers(zmk_ble_active_profile_index());
+    update_jis_layer(zmk_ble_active_profile_index());
     return 0;
 }
 

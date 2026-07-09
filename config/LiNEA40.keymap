@@ -16,6 +16,26 @@
 #define SCROLL 5
 #define WIRELESS 6
 
+// --- JIS(日本語配列)エイリアス ---
+// ZMKコアは JP_* を定義しないためローカル定義（eswai/zmk_mable 準拠）。
+// A-3: JISホスト側で US層と同じグリフを出すHID usageに写像する（JIS_SYMBOLS 層で使用）。
+// 素キー（JISで別グリフになる usage）
+#define JP_AT    LBKT          // @  (0x2F)
+#define JP_LBKT  RBKT          // [  (0x30)
+#define JP_RBKT  NUHS          // ]  (0x32)
+#define JP_COLON SQT           // :  (0x34)
+#define JP_CARET EQUAL         // ^  (0x2E)
+#define JP_BSLH  INT1          // \  (0x87)  ※pos5用。実打不出なら JP_YEN(INT3) 代替を検討
+// シフト合成
+#define JP_AMPS  LS(N6)        // &
+#define JP_ASTRK LS(JP_COLON)  // *
+#define JP_LPAR  LS(N8)        // (
+#define JP_RPAR  LS(N9)        // )
+#define JP_DQT   LS(N2)        // "
+#define JP_GRAVE LS(JP_AT)     // `
+#define JP_TILDE LS(JP_CARET)  // ~
+// #define JP_YEN INT3         // ¥/\  (0x89)  ※ホスト依存の代替（§2.3※）
+
 //mouse cursol
 
 &mmv {
@@ -374,6 +394,41 @@
 &trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans          &trans  &trans  &trans
             >;
+        };
+
+        JIS_MODE {
+            // 実index 14: 全&transのモードフラグ層（打鍵には影響しない）。
+            // behavior_os_layer.c が profile_is_jis[] に従い activate/deactivate する。
+            display-name = "JIS Mode";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans          &trans  &trans  &trans
+            >;
+        };
+
+        JIS_SYMBOLS {
+            // 実index 15: SCROLL(6)へのJIS差分オーバーレイ。&trans はSCROLL(6)へフォールバック。
+            // conditional_layers で SCROLL(6)+JIS_MODE(14) 同時Active時のみ有効化される。
+            display-name = "JIS Sym";
+            bindings = <
+&trans        &kp JP_AMPS   &kp JP_ASTRK  &kp JP_LPAR   &kp JP_RPAR                       &kp JP_BSLH   &trans  &trans  &trans  &kp JP_DQT
+&kp JP_COLON  &trans        &trans        &kp JP_CARET  &kp JP_DQT                        &kp JP_LBKT   &trans  &trans  &trans  &trans
+&kp JP_GRAVE  &trans        &kp JP_AT     &trans        &trans                            &kp JP_RBKT   &trans  &trans  &trans  &kp JP_TILDE
+&trans        &trans        &trans        &trans        &trans        &trans    &trans    &trans                &trans  &trans  &trans
+            >;
+        };
+    };
+
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+
+        jis_symbols {
+            // SCROLL(実6) と JIS_MODE(14) が同時Active → JIS_SYMBOLS(15) を有効化。
+            // ★生の数値。#define SCROLL(=5) は実indexと不一致なので使わない。
+            if-layers = <6 14>;
+            then-layer = <15>;
         };
     };
 };
