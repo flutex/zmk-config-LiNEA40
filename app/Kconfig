@@ -14,8 +14,22 @@ config ZMK_LAYER_STATUS_GATT
     depends on ZMK_BLE
     depends on !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL
 
+config ZMK_USB_HOST_OS_DETECTION
+    bool "Detect wired USB host OS and switch default layer"
+    default n
+    depends on ZMK_USB
+    depends on !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL
+
+config ZMK_USB_HOST_OS_DETECTION_SETTLE_MS
+    int "Settle delay (ms) before classifying the wired USB host OS"
+    default 250
+    depends on ZMK_USB_HOST_OS_DETECTION
+
+# Debug/measurement only (future iPad fingerprinting). The usb_dc_ep_read --wrap
+# is owned by usb_host_os.c; enabling this only adds the ring buffer + the
+# &usb_fp_type readout behavior, never a second wrap.
 config ZMK_USB_FP_CAPTURE
-    bool "USB host fingerprint capture (measurement build)"
+    bool "USB host fingerprint capture (measurement/debug build)"
     default n
     depends on ZMK_USB
     depends on !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL

@@ -1,9 +1,9 @@
 /*
- * USB Host Fingerprint Capture (measurement build)
+ * USB Host Fingerprint Capture (measurement / debug build)
  *
- * Public interface for reading captured USB control-transfer SETUP packets.
- * See src/usb_fp_capture.c for the capture path (linker --wrap on
- * usb_dc_ep_read).
+ * Public interface for the SETUP-packet ring buffer. The observation point
+ * (linker --wrap on usb_dc_ep_read) lives in src/usb_host_os.c, which calls
+ * usb_fp_capture_record() below. This module only stores and snapshots.
  */
 
 #ifndef ZMK_USB_FP_CAPTURE_H_
@@ -32,5 +32,12 @@ struct fp_entry {
  * and may wrap on overflow). The copy runs under a short irq_lock.
  */
 int usb_fp_capture_snapshot(struct fp_entry *out, uint32_t *out_total);
+
+/*
+ * Record one decoded SETUP packet into the ring. Called from the usb_dc_ep_read
+ * wrap in usb_host_os.c (USB workqueue context); does a short irq_lock ring
+ * insert and nothing else. `e` is copied; NULL is ignored.
+ */
+void usb_fp_capture_record(const struct fp_entry *e);
 
 #endif /* ZMK_USB_FP_CAPTURE_H_ */

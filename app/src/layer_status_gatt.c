@@ -7,12 +7,15 @@
  * Service:        4C4E4541-3430-4B42-0001-000000000001  ("LNEA"-"40"-"KB")
  * Characteristic: 4C4E4541-3430-4B42-0001-000000000002  (Read + Notify, 要暗号化)
  *
- * ペイロード(7バイト・旧5バイトの上位互換):
+ * ペイロード(8バイト・旧5/7バイトの上位互換):
  *   [0..3] レイヤー状態ビットマスク (uint32 LE, bit N = レイヤーN有効)
  *   [4]    最上位アクティブレイヤー index (uint8)
  *   [5]    アクティブBTプロファイル index (uint8, 0..4。USB選択中も選択中プロファイルを保持)
  *   [6]    アクティブエンドポイント (uint8, 0=USB / 1=BLE)
- * Mac側はペイロード長で新旧を判別する（>=7で[5][6]を読む）。
+ *   [7]    検出USBホストOS (uint8, 0=UNKNOWN/Windows / 1=macOS)。
+ *          CONFIG_ZMK_USB_HOST_OS_DETECTION 有効時のみ存在。[6]==0(USB)のとき意味を持つ。
+ * Mac側はペイロード長で新旧を判別する（>=7で[5][6]、>=8で[7]を読む前方互換）。
+ * 無効時は従来どおり7バイト。
  *
  * レイヤー/プロファイル/エンドポイント変更は低頻度なのでBLE帯域・電池への影響は無視できる。
  */
@@ -31,7 +34,15 @@
 #include <zmk/ble.h>
 #include <zmk/endpoints.h>
 
-static uint8_t layer_payload[7];
+#if IS_ENABLED(CONFIG_ZMK_USB_HOST_OS_DETECTION)
+#include <zmk_usb_host_os.h>
+#include <zmk/events/usb_host_os_changed.h>
+#define LAYER_PAYLOAD_LEN 8
+#else
+#define LAYER_PAYLOAD_LEN 7
+#endif
+
+static uint8_t layer_payload[LAYER_PAYLOAD_LEN];
 static bool notify_enabled;
 
 static void update_payload(void) {
@@ -41,6 +52,12 @@ static void update_payload(void) {
     layer_payload[5] = (uint8_t)zmk_ble_active_profile_index();
     struct zmk_endpoint_instance ep = zmk_endpoints_selected();
     layer_payload[6] = (uint8_t)ep.transport; /* 0=USB / 1=BLE */
+#if IS_ENABLED(CONFIG_ZMK_USB_HOST_OS_DETECTION)
+    /* [7]: 0=UNKNOWN/Windows, 1=macOS. concern#1整合: USB切断でenumがUNKNOWNへ戻り
+     * [7]も自然に0へ戻る。 */
+    layer_payload[7] =
+        (zmk_usb_host_os_current() == ZMK_USB_HOST_OS_MACOS) ? 1 : 0;
+#endif
 }
 
 static void layer_ccc_changed(const struct bt_gatt_attr *attr, uint16_t value) {
@@ -79,3 +96,7 @@ ZMK_SUBSCRIPTION(layer_status_gatt, zmk_layer_state_changed);
 ZMK_SUBSCRIPTION(layer_status_gatt, zmk_endpoint_changed);
 /* USB選択中はendpoint_changedが発火しないため、プロファイル切替を直接購読して[5]を追随 */
 ZMK_SUBSCRIPTION(layer_status_gatt, zmk_ble_active_profile_changed);
+#if IS_ENABLED(CONFIG_ZMK_USB_HOST_OS_DETECTION)
+/* USBホストOS検出確定/切断リセットで[7]を追随notify */
+ZMK_SUBSCRIPTION(layer_status_gatt, zmk_usb_host_os_changed);
+#endif
