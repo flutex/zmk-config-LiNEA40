@@ -13,3 +13,9 @@ config ZMK_LAYER_STATUS_GATT
     default n
     depends on ZMK_BLE
     depends on !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL
+
+config ZMK_USB_FP_CAPTURE
+    bool "USB host fingerprint capture (measurement build)"
+    default n
+    depends on ZMK_USB
+    depends on !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL

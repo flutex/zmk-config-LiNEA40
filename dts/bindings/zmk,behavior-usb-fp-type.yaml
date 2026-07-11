@@ -1,0 +1,5 @@
+description: USB host fingerprint capture typing behavior
+
+compatible: "zmk,behavior-usb-fp-type"
+
+include: zero_param.yaml
