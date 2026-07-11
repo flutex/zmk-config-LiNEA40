@@ -230,6 +230,12 @@
             key-positions = <18 28>;
             layers = <5 3>;
         };
+
+        combo_Scroll {
+            bindings = <&mo 6>;
+            key-positions = <9 8>;
+            layers = <0 1 2>;
+        };
     };
 
     behaviors {
