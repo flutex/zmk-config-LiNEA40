@@ -197,7 +197,7 @@
         combo_esc {
             bindings = <&kp ESCAPE>;
             key-positions = <0 1>;
-            layers = <0 1>;
+            layers = <0 1 2>;
         };
 
         combo_tab {
@@ -209,7 +209,7 @@
         combo_shift {
             bindings = <&kp LSHIFT>;
             key-positions = <20 21>;
-            layers = <0>;
+            layers = <0 1 2>;
         };
 
         leftclick3 {
