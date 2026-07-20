@@ -239,7 +239,7 @@
         combo_Scroll {
             bindings = <&mo 6>;
             key-positions = <9 8>;
-            layers = <0 1 2>;
+            layers = <0 1 2 14>;
         };
     };
 
