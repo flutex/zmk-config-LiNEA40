@@ -87,7 +87,9 @@
         // 発動キーはLineaStudioから &mo 11 (Momentary/Snipe) をランタイム割当できる。
         // 注意: レイヤーindex固定のため、StudioでSnipe層を並べ替えるとズレる
         snipe-layers = <11>;
-        scroll-layers = <6>;
+        // 6=Symbol(スペース保持)。15=JIS Sym はJISモード時のスペース保持で入る同役割層なので
+        // 同じくトラックボールをスクロール化する（indexはビルド時固定・並べ替え注意は snipe と同じ）
+        scroll-layers = <6 15>;
         //scroll-layers = <4 5 6>;
     };
 };
