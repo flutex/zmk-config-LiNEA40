@@ -1,3 +1,7 @@
+# linea_jis.h (os_layer ⇔ layer_status_gatt の共有API) を全ソースから解決できるようにする。
+# USBブロック内の include 追加と重複しても CMake が重複除去するので無害。
+target_include_directories(app PRIVATE include)
+
 target_sources_ifdef(CONFIG_ZMK_BEHAVIOR_OS_LAYER app PRIVATE src/behavior_os_layer.c)
 
 if(CONFIG_CUSTOM_BATTERY_TYPIST)

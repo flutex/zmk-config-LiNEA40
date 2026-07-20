@@ -6,6 +6,10 @@
  *
  * Service:        4C4E4541-3430-4B42-0001-000000000001  ("LNEA"-"40"-"KB")
  * Characteristic: 4C4E4541-3430-4B42-0001-000000000002  (Read + Notify, 要暗号化)
+ * Characteristic: 4C4E4541-3430-4B42-0001-000000000003  (Read + Write, 要暗号化)
+ *   プロファイル別JISフラグ 1バイト（bit n = BTn がJIS）。書き込みは
+ *   behavior_os_layer.c が settings 永続化と即時レイヤー再適用を行う。
+ *   CONFIG_ZMK_BEHAVIOR_OS_LAYER 無効時はこの特性ごと存在しない。
  *
  * ペイロード(8バイト・旧5/7バイトの上位互換):
  *   [0..3] レイヤー状態ビットマスク (uint32 LE, bit N = レイヤーN有効)
@@ -22,6 +26,7 @@
 
 #include <zephyr/kernel.h>
 #include <zephyr/bluetooth/bluetooth.h>
+#include <zephyr/bluetooth/att.h>
 #include <zephyr/bluetooth/gatt.h>
 #include <zephyr/bluetooth/uuid.h>
 #include <zephyr/sys/byteorder.h>
@@ -75,11 +80,50 @@ static const struct bt_uuid_128 layer_svc_uuid =
 static const struct bt_uuid_128 layer_chrc_uuid =
     BT_UUID_INIT_128(BT_UUID_128_ENCODE(0x4C4E4541, 0x3430, 0x4B42, 0x0001, 0x000000000002));
 
+#if IS_ENABLED(CONFIG_ZMK_BEHAVIOR_OS_LAYER)
+
+#include <linea_jis.h>
+
+static const struct bt_uuid_128 jis_chrc_uuid =
+    BT_UUID_INIT_128(BT_UUID_128_ENCODE(0x4C4E4541, 0x3430, 0x4B42, 0x0001, 0x000000000003));
+
+static ssize_t read_jis_flags(struct bt_conn *conn, const struct bt_gatt_attr *attr, void *buf,
+                              uint16_t len, uint16_t offset) {
+    uint8_t v = linea_jis_flags_get();
+    return bt_gatt_attr_read(conn, attr, buf, len, offset, &v, sizeof(v));
+}
+
+static ssize_t write_jis_flags(struct bt_conn *conn, const struct bt_gatt_attr *attr,
+                               const void *buf, uint16_t len, uint16_t offset, uint8_t flags) {
+    if (offset != 0) {
+        return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
+    }
+    if (len != 1) {
+        return BT_GATT_ERR(BT_ATT_ERR_INVALID_ATTRIBUTE_LEN);
+    }
+    linea_jis_flags_set(((const uint8_t *)buf)[0]);
+    return len;
+}
+
+/* JIS特性は末尾に追加（attrs[1]=レイヤー特性宣言のindexを既存notifyと変えない） */
+BT_GATT_SERVICE_DEFINE(
+    layer_status_svc, BT_GATT_PRIMARY_SERVICE((void *)&layer_svc_uuid),
+    BT_GATT_CHARACTERISTIC(&layer_chrc_uuid.uuid, BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY,
+                           BT_GATT_PERM_READ_ENCRYPT, read_layer_state, NULL, NULL),
+    BT_GATT_CCC(layer_ccc_changed, BT_GATT_PERM_READ_ENCRYPT | BT_GATT_PERM_WRITE_ENCRYPT),
+    BT_GATT_CHARACTERISTIC(&jis_chrc_uuid.uuid, BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE,
+                           BT_GATT_PERM_READ_ENCRYPT | BT_GATT_PERM_WRITE_ENCRYPT,
+                           read_jis_flags, write_jis_flags, NULL), );
+
+#else /* !CONFIG_ZMK_BEHAVIOR_OS_LAYER — JIS特性なしの従来サービス */
+
 BT_GATT_SERVICE_DEFINE(
     layer_status_svc, BT_GATT_PRIMARY_SERVICE((void *)&layer_svc_uuid),
     BT_GATT_CHARACTERISTIC(&layer_chrc_uuid.uuid, BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY,
                            BT_GATT_PERM_READ_ENCRYPT, read_layer_state, NULL, NULL),
     BT_GATT_CCC(layer_ccc_changed, BT_GATT_PERM_READ_ENCRYPT | BT_GATT_PERM_WRITE_ENCRYPT), );
+
+#endif /* CONFIG_ZMK_BEHAVIOR_OS_LAYER */
 
 static int layer_status_listener(const zmk_event_t *eh) {
     update_payload();
