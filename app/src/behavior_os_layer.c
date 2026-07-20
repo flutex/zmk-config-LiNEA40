@@ -55,7 +55,7 @@ enum os_class { OS_WIN = 0, OS_MAC = 1, OS_IOS = 2 };
 // SINGLE SOURCE OF TRUTH for JIS (concern #5): the USB path does NOT keep its
 // own is_jis table. It reuses this array via the representative BLE profile for
 // each detected OS class (see usb_class_is_jis), so the two can never drift.
-static const bool profile_is_jis[5] = {false, false, false, false, false};
+static const bool profile_is_jis[5] = {false, true, false, false, false};
 
 static enum os_class os_class_for_profile(uint8_t profile) {
     switch (profile) {
