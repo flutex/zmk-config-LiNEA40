@@ -112,6 +112,16 @@ static void arbitrate_from_profile(uint8_t profile) {
     apply_jis(profile_jis(profile));
 }
 
+// BLE profile events also fire when a host connects or disconnects. Apply the
+// resulting layer changes after that connection callback has returned, and
+// coalesce rapid events while two bonded hosts reconnect at startup.
+static void os_layer_update_work_cb(struct k_work *work);
+K_WORK_DELAYABLE_DEFINE(os_layer_update_work, os_layer_update_work_cb);
+
+static void schedule_os_layer_update(void) {
+    k_work_reschedule(&os_layer_update_work, K_MSEC(250));
+}
+
 #if IS_ENABLED(CONFIG_ZMK_USB_HOST_OS_DETECTION)
 
 // Reuse profile_is_jis[] as the single JIS source (concern #5): each USB OS
@@ -156,7 +166,7 @@ static void resolve_and_apply(void) {
 static int os_layer_listener_cb(const zmk_event_t *eh) {
     // Any of the three subscribed events re-runs the same endpoint arbitration.
     (void)eh;
-    resolve_and_apply();
+    schedule_os_layer_update();
     return ZMK_EV_EVENT_BUBBLE;
 }
 
@@ -173,7 +183,7 @@ static int os_layer_listener_cb(const zmk_event_t *eh) {
     const struct zmk_ble_active_profile_changed *ev =
         as_zmk_ble_active_profile_changed(eh);
     if (ev) {
-        arbitrate_from_profile(ev->index);
+        schedule_os_layer_update();
     }
     return ZMK_EV_EVENT_BUBBLE;
 }
@@ -193,6 +203,11 @@ static void linea_os_layer_refresh(void) {
 #else
     arbitrate_from_profile(zmk_ble_active_profile_index());
 #endif
+}
+
+static void os_layer_update_work_cb(struct k_work *work) {
+    ARG_UNUSED(work);
+    linea_os_layer_refresh();
 }
 
 static void jis_flags_work_cb(struct k_work *work) {
@@ -245,10 +260,9 @@ static int behavior_os_layer_init(void) {
     settings_subsys_init();
     settings_load_subtree("linea_os");
 #endif
-    // Concern #7: at init do NOT depend on endpoint state (endpoints init order
-    // is not guaranteed here). Apply the BLE default from the active profile;
-    // the USB path is picked up later via endpoint_changed / usb_host_os_changed.
-    arbitrate_from_profile(zmk_ble_active_profile_index());
+    // Let settings loading, USB initialization, and early BLE reconnects settle
+    // before the first layer change. Later events reschedule the same work.
+    k_work_reschedule(&os_layer_update_work, K_MSEC(1000));
     return 0;
 }
 
