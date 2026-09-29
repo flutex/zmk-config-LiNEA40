@@ -118,8 +118,19 @@ static void arbitrate_from_profile(uint8_t profile) {
 static void os_layer_update_work_cb(struct k_work *work);
 K_WORK_DELAYABLE_DEFINE(os_layer_update_work, os_layer_update_work_cb);
 
+// The central can reconnect to several bonded hosts and to the peripheral
+// during startup. Keep the keymap untouched until those connections settle.
+// Profile changes after startup still update the layers promptly.
+#define OS_LAYER_STARTUP_SETTLE_MS 8000
+
 static void schedule_os_layer_update(void) {
-    k_work_reschedule(&os_layer_update_work, K_MSEC(250));
+    int64_t now = k_uptime_get();
+    if (now < OS_LAYER_STARTUP_SETTLE_MS) {
+        k_work_reschedule(&os_layer_update_work,
+                          K_MSEC(OS_LAYER_STARTUP_SETTLE_MS - now));
+    } else {
+        k_work_reschedule(&os_layer_update_work, K_MSEC(250));
+    }
 }
 
 #if IS_ENABLED(CONFIG_ZMK_USB_HOST_OS_DETECTION)
@@ -262,7 +273,7 @@ static int behavior_os_layer_init(void) {
 #endif
     // Let settings loading, USB initialization, and early BLE reconnects settle
     // before the first layer change. Later events reschedule the same work.
-    k_work_reschedule(&os_layer_update_work, K_MSEC(1000));
+    k_work_reschedule(&os_layer_update_work, K_MSEC(OS_LAYER_STARTUP_SETTLE_MS));
     return 0;
 }
 

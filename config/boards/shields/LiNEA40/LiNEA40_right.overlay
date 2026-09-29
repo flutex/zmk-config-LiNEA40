@@ -1,20 +1,6 @@
 #include <input/processors.dtsi>
 #include "LiNEA40.dtsi"
 
-// Studio RPC とは別の CDC ACM をUSBログの出力先にする。
-/ {
-    chosen {
-        zephyr,console = &linea_log_uart;
-        zephyr,shell-uart = &linea_log_uart;
-    };
-};
-
-&zephyr_udc0 {
-    linea_log_uart: linea_log_uart {
-        compatible = "zephyr,cdc-acm-uart";
-    };
-};
-
 &default_transform {
     col-offset = <6>;
 };
